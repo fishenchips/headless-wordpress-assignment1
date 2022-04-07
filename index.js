@@ -1,9 +1,12 @@
+require("dotenv").config();
+
 const express = require("express");
 
 const exphbs = require("express-handlebars");
 
 const app = express();
 
+//Setup handlebars
 app.engine(
   "hbs",
   hbs.engine({
