@@ -20,3 +20,7 @@ module.exports.getPostById = async function (postId) {
 module.exports.getPages = async function () {
   return await api().get("/pages");
 };
+
+module.exports.getPagesById = async function (pageId) {
+  return await api().get("/pages/" + pageId);
+};

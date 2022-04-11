@@ -21,22 +21,49 @@ app.engine(
 //view through handlebars
 app.set("view engine", "hbs");
 
+// Set up styling
+app.use(express.static("public"));
+
+/* --------- HOME PAGE ------ */
 app.get("/", async (req, res) => {
-  const pagesResponse = await api.getPosts();
+  const pagesResponse = await api.getPages();
   const pages = pagesResponse.data;
 
   const postsResponse = await api.getPosts();
   const posts = postsResponse.data;
 
-  res.render("home", { pages });
+  res.render("home", {
+    pages,
+    posts,
+    title: "Home",
+    style: "home.css",
+  });
 });
 
+/* ------- POST pages -------- */
 app.get("/posts/:id", async (req, res) => {
   const postResponse = await api.getPostById(req.params.id);
   const post = postResponse.data;
   const postContent = post.content.rendered;
   const postTitle = post.title.rendered;
-  res.render("post", { post, postContent, postTitle });
+  res.render("post", {
+    postContent,
+    postTitle,
+    style: "posts.css",
+  });
+});
+
+/* --------- PAGE pages --------- */
+app.get("/pages/:id", async (req, res) => {
+  const pageResponse = await api.getPagesById(req.params.id);
+  const page = pageResponse.data;
+  const pageContent = page.content.rendered;
+  const pageTitle = page.title.rendered;
+  res.render("page", {
+    pageContent,
+    pageTitle,
+    style: "pages.css",
+  });
 });
 
 //testing that call for api calls work
