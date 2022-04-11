@@ -16,3 +16,7 @@ module.exports.getPosts = async function () {
 module.exports.getPostById = async function (postId) {
   return await api().get("/posts/" + postId);
 };
+
+module.exports.getPages = async function () {
+  return await api().get("/pages");
+};
