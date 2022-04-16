@@ -4,12 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/{{style}}">
+    <link rel="stylesheet" href="/css/style.css">
     <title>{{title}}</title>
 </head>
 <body>
-    <h1>Heja bajen</h1>
-    <h2>{{title}}</h2>
+    <h1 style="text-align:center; color:RGB(0, 131, 77)">Heja Bajen</h1>
+
+    <div class="nav-bar-pages">
+        <a href="/">Home</a>
+        {{#each pages}}
+       
+            <a href="/pages/{{id}}">{{title.rendered}}</a>
+
+        {{/each}}
+    </div>
+
     {{{body}}}
 </body>
 </html>

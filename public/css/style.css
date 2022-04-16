@@ -1,0 +1,14 @@
+/* * {
+    color: RGB(0, 131, 77)
+} */
+
+.navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid saddlebrown
+}
+
+.navbar-header {
+    color: RGB(0, 131, 77)
+}

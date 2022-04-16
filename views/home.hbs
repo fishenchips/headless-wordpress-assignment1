@@ -1,12 +1,8 @@
-<h5>Pages</h5>
-{{#each pages}}
-    
-    <a href="/pages/{{id}}">{{title.rendered}}</a>
+{{>header}}
 
-{{/each}}
-
+<h3>Posts</h3>
 {{#each posts}}
-    <h3>Posts</h3>
+    
     
     <a href="/posts/{{id}}">{{title.rendered}}.</a>
 

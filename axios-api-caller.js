@@ -9,7 +9,12 @@ function api() {
 
 //GET all posts
 module.exports.getPosts = async function () {
-  return await api().get("/posts");
+  return await api().get("/posts", {
+    params: {
+      per_page: 2,
+      page: 1,
+    },
+  });
 };
 
 //GET a post by id

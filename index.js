@@ -50,43 +50,27 @@ app.get("/posts/:id", async (req, res) => {
     postContent,
     postTitle,
     style: "posts.css",
+    title: `${postTitle}`,
   });
 });
 
 /* --------- PAGE pages --------- */
 app.get("/pages/:id", async (req, res) => {
+  const pagesRespone = await api.getPages();
+  const pages = pagesRespone.data;
+
   const pageResponse = await api.getPagesById(req.params.id);
   const page = pageResponse.data;
   const pageContent = page.content.rendered;
   const pageTitle = page.title.rendered;
   res.render("page", {
+    pages,
     pageContent,
     pageTitle,
     style: "pages.css",
+    title: `${pageTitle}`,
   });
 });
-
-//testing that call for api calls work
-/* async function Main() {
-  const postsResponse = await api.getPosts();
-  const posts = postsResponse.data;
-  console.log(posts);
-
-
-    place in another page later
-        const postsResponse = await api.getPosts();
-        const posts = postsResponse.data;
-        res.render("home", { posts });
-
-
-
-  const postId = posts[0].id;
-  const postResponse = await api.getPostById(postId);
-  const post = postResponse.data;
-  console.log(post.title.rendered);
-} 
-
-Main();*/
 
 app.listen(8000, () => {
   console.log("http://localhost:8000/");
