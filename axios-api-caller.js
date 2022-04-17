@@ -1,9 +1,16 @@
 const axios = require("axios").default;
 
+//Site info for home page
+module.exports.getSiteInfo = async function () {
+  const response = await axios.get(process.env.BASE_URL);
+
+  return response;
+};
+
 //base setting that are used for every call
 function api() {
   return axios.create({
-    baseURL: process.env.BASE_URL,
+    baseURL: process.env.BASE_URL + "/wp/v2",
   }); //using built in process to reach my env url
 }
 

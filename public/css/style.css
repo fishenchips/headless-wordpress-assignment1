@@ -39,3 +39,7 @@ h2, h3 {
 .navbar-header {
     color: RGB(0, 131, 77)
 }
+
+.home-tag{
+    text-align: center;
+}

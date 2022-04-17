@@ -32,11 +32,20 @@ app.get("/", async (req, res) => {
   const postsResponse = await api.getPosts();
   const posts = postsResponse.data;
 
+  const siteInfoResponse = await api.getSiteInfo();
+  const siteInfo = siteInfoResponse.data;
+  const siteName = siteInfo.name;
+  const siteDesc = siteInfo.description;
+
+  console.log(siteInfo);
+
   res.render("home", {
     pages,
     posts,
     title: "Home",
     style: "home.css",
+    siteName,
+    siteDesc,
   });
 });
 
