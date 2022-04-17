@@ -1,12 +1,39 @@
 /* * {
+    BAJEN_COLOR!
     color: RGB(0, 131, 77)
 } */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial;
+}
 
-.navbar {
+html{
+    background-color: wheat;
+}
+
+body{
+    background-color: whitesmoke;
+    max-width: 750px;
+    border: 2px solid gray;
+    padding:  10px;
+    margin: 25px auto;
+}
+
+h1, h2, h3, p {
+    margin-bottom: 0.5rem;
+}
+
+h2, h3 {
+    color: RGB(0, 131, 77);
+
+}
+
+.nav-bar-pages{
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid saddlebrown
+    justify-content: space-between;
+    margin-bottom: 1rem;
 }
 
 .navbar-header {

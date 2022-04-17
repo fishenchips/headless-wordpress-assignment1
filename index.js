@@ -53,6 +53,10 @@ app.get("/posts", async (req, res) => {
 
   //try catch so site doesnt crash
   try {
+    //adding pages for header
+    const pagesRespone = await api.getPages();
+    const pages = pagesRespone.data;
+
     const postsResponse = await api.getPosts(page);
     const posts = postsResponse.data;
 
@@ -67,6 +71,7 @@ app.get("/posts", async (req, res) => {
     res.render("posts", {
       title: "Posts",
       posts,
+      pages,
       page,
       nextPageNr,
       prevPageNr,
@@ -83,11 +88,15 @@ app.get("/posts", async (req, res) => {
 
 /* ------- POST pages -------- */
 app.get("/posts/:id", async (req, res) => {
+  const pagesResponse = await api.getPages();
+  const pages = pagesResponse.data;
+
   const postResponse = await api.getPostById(req.params.id);
   const post = postResponse.data;
   const postContent = post.content.rendered;
   const postTitle = post.title.rendered;
   res.render("post", {
+    pages,
     postContent,
     postTitle,
     style: "posts.css",
