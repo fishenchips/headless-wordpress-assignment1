@@ -40,6 +40,47 @@ app.get("/", async (req, res) => {
   });
 });
 
+app.get("/posts", async (req, res) => {
+  // page is page number (params {page: pagenr}
+  let page = parseInt(req.query.page);
+
+  console.log({ page });
+
+  //going automatically to page 1 if the page doenst exist
+  if (isNaN(page)) {
+    page = 1;
+  }
+
+  //try catch so site doesnt crash
+  try {
+    const postsResponse = await api.getPosts(page);
+    const posts = postsResponse.data;
+
+    //inside postResponse we have access to headers -> "x-wp-totalpages"
+    console.log(postsResponse);
+
+    const totalPages = parseInt(postsResponse.headers["x-wp-totalpages"]);
+
+    const nextPageNr = page + 1;
+    const prevPageNr = page - 1;
+
+    res.render("posts", {
+      title: "Posts",
+      posts,
+      page,
+      nextPageNr,
+      prevPageNr,
+      firstPage: page == 1,
+      lastPage: page == totalPages,
+    });
+  } catch (error) {
+    res.render("error", {
+      title: "Error | 404",
+      errorMsg: "Page doesn't exist.",
+    });
+  }
+});
+
 /* ------- POST pages -------- */
 app.get("/posts/:id", async (req, res) => {
   const postResponse = await api.getPostById(req.params.id);

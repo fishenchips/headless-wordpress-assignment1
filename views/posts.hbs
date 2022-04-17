@@ -1,0 +1,29 @@
+<h3>Posts</h3>
+{{#each posts}}
+    
+    
+    <a href="/posts/{{id}}">{{title.rendered}}.</a>
+
+    {{{content.rendered}}}
+{{/each}}
+
+
+{{#if firstPage}}
+    ({{page}})
+
+    <a href="/posts?page={{nextPageNr}}">Next Page</a>
+
+    {{else if lastPage}}
+
+        <a href="/posts?page={{prevPageNr}}">Previous Page</a>
+        ({{page}})
+
+    {{else}}
+
+        <a href="/posts?page={{prevPageNr}}">Previous Page</a>
+        
+        ({{page}})
+
+        <a href="/posts?page={{nextPageNr}}">Next Page</a>
+        
+{{/if}}

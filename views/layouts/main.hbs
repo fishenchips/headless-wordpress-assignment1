@@ -11,10 +11,15 @@
     <h1 style="text-align:center; color:RGB(0, 131, 77)">Heja Bajen</h1>
 
     <div class="nav-bar-pages">
+        |
         <a href="/">Home</a>
+        |
+        <a href="/posts">Posts</a>
+        | 
         {{#each pages}}
        
             <a href="/pages/{{id}}">{{title.rendered}}</a>
+            |
 
         {{/each}}
     </div>
