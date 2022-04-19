@@ -94,19 +94,16 @@ app.get("/posts/:id", async (req, res) => {
   const pagesResponse = await api.getPages();
   const pages = pagesResponse.data;
 
-  const postResponse = await api.getPostById(req.params.id);
-  const post = postResponse.data;
-  const postContent = post.content.rendered;
-  const postTitle = post.title.rendered;
+  const post = await api.getPostById(req.params.id);
 
   const siteInfo = await api.getSiteInfo();
 
   res.render("post", {
     pages,
-    postContent,
-    postTitle,
+    post,
     style: "posts.css",
-    title: `${postTitle}`,
+    //everything is now in the new object response
+    title: post.response.title.rendered,
     siteInfo,
   });
 });

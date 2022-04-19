@@ -99,7 +99,43 @@ module.exports.getPosts = async function (pageNr) {
 
 //GET a post by id
 module.exports.getPostById = async function (postId) {
-  return await api().get("/posts/" + postId);
+  //will create a cache file for each postId
+  const cacheFileName = "cache/getPostsById" + postId;
+
+  let content = undefined;
+
+  if (fs.existsSync(cacheFileName)) {
+    const fileContent = fs.readFileSync(cacheFileName);
+    const fileData = JSON.parse(fileContent);
+
+    const oneHrAgo = Date.now() - 60 * 60 * 1000;
+
+    if (oneHrAgo < fileData.time) {
+      content = {
+        response: fileData.content,
+        headers: fileData.headers,
+      };
+    }
+  }
+  if (!content) {
+    const response = await api().get("/posts/" + postId);
+    const time = Date.now();
+
+    const data = JSON.stringify({
+      time: time,
+      content: response.data,
+      headers: response.headers,
+    });
+
+    fs.writeFileSync(cacheFileName, data);
+
+    content = {
+      response: response.data,
+      headers: response.headers,
+    };
+  }
+
+  return content;
 };
 
 module.exports.getPages = async function () {
