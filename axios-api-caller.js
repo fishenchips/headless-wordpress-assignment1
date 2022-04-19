@@ -53,12 +53,48 @@ function api() {
 
 //GET all posts
 module.exports.getPosts = async function (pageNr) {
-  return await api().get("/posts", {
-    params: {
-      per_page: 2,
-      page: pageNr,
-    },
-  });
+  //will create a cache file for each page
+  const cacheFileName = "cache/getPosts" + pageNr;
+
+  let content = undefined;
+
+  if (fs.existsSync(cacheFileName)) {
+    const fileContent = fs.readFileSync(cacheFileName);
+    const fileData = JSON.parse(fileContent);
+
+    const oneHrAgo = Date.now() - 60 * 60 * 1000;
+
+    if (oneHrAgo < fileData.time) {
+      content = {
+        response: fileData.content,
+        headers: fileData.headers,
+      };
+    }
+  }
+  if (!content) {
+    const response = await api().get("/posts", {
+      params: {
+        per_page: 2,
+        page: pageNr,
+      },
+    });
+    const time = Date.now();
+
+    const data = JSON.stringify({
+      time: time,
+      content: response.data,
+      headers: response.headers,
+    });
+
+    fs.writeFileSync(cacheFileName, data);
+
+    content = {
+      response: response.data,
+      headers: response.headers,
+    };
+  }
+
+  return content;
 };
 
 //GET a post by id

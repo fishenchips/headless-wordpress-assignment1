@@ -47,8 +47,6 @@ app.get("/posts", async (req, res) => {
   // page is page number (params {page: pagenr}
   let page = parseInt(req.query.page);
 
-  console.log({ page });
-
   //going automatically to page 1 if the page doenst exist
   if (isNaN(page)) {
     page = 1;
@@ -57,20 +55,19 @@ app.get("/posts", async (req, res) => {
   //try catch so site doesnt crash
   try {
     //adding pages for header
-    const pagesRespone = await api.getPages();
-    const pages = pagesRespone.data;
+    const pagesResponse = await api.getPages();
+    const pages = pagesResponse.data;
 
-    const postsResponse = await api.getPosts(page);
-    const posts = postsResponse.data;
+    const posts = await api.getPosts(page);
+    //const posts = postsResponse.data;
 
-    //inside postResponse we have access to headers -> "x-wp-totalpages"
-    console.log(postsResponse);
-
-    const totalPages = parseInt(postsResponse.headers["x-wp-totalpages"]);
+    //inside posts we have access to headers -> "x-wp-totalpages"
+    const totalPages = parseInt(posts.headers["x-wp-totalpages"]);
 
     const nextPageNr = page + 1;
     const prevPageNr = page - 1;
 
+    //for the header
     const siteInfo = await api.getSiteInfo();
 
     res.render("posts", {
