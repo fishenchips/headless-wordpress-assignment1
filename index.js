@@ -32,20 +32,14 @@ app.get("/", async (req, res) => {
   const postsResponse = await api.getPosts();
   const posts = postsResponse.data;
 
-  const siteInfoResponse = await api.getSiteInfo();
-  const siteInfo = siteInfoResponse.data;
-  const siteName = siteInfo.name;
-  const siteDesc = siteInfo.description;
-
-  console.log(siteInfo);
+  const siteInfo = await api.getSiteInfo();
 
   res.render("home", {
     pages,
     posts,
     title: "Home",
     style: "home.css",
-    siteName,
-    siteDesc,
+    siteInfo,
   });
 });
 
@@ -77,6 +71,8 @@ app.get("/posts", async (req, res) => {
     const nextPageNr = page + 1;
     const prevPageNr = page - 1;
 
+    const siteInfo = await api.getSiteInfo();
+
     res.render("posts", {
       title: "Posts",
       posts,
@@ -86,6 +82,7 @@ app.get("/posts", async (req, res) => {
       prevPageNr,
       firstPage: page == 1,
       lastPage: page == totalPages,
+      siteInfo,
     });
   } catch (error) {
     res.render("error", {
@@ -104,12 +101,16 @@ app.get("/posts/:id", async (req, res) => {
   const post = postResponse.data;
   const postContent = post.content.rendered;
   const postTitle = post.title.rendered;
+
+  const siteInfo = await api.getSiteInfo();
+
   res.render("post", {
     pages,
     postContent,
     postTitle,
     style: "posts.css",
     title: `${postTitle}`,
+    siteInfo,
   });
 });
 
@@ -122,12 +123,16 @@ app.get("/pages/:id", async (req, res) => {
   const page = pageResponse.data;
   const pageContent = page.content.rendered;
   const pageTitle = page.title.rendered;
+
+  const siteInfo = await api.getSiteInfo();
+
   res.render("page", {
     pages,
     pageContent,
     pageTitle,
     style: "pages.css",
     title: `${pageTitle}`,
+    siteInfo,
   });
 });
 

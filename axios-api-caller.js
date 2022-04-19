@@ -1,10 +1,47 @@
 const axios = require("axios").default;
+//part of node
+const fs = require("fs");
+
+// https://redcapes.se
+// http://hammarby.local
 
 //Site info for home page
 module.exports.getSiteInfo = async function () {
-  const response = await axios.get(process.env.BASE_URL);
+  //Creating cache file
+  const cacheFileName = "cache/getSiteInfo";
 
-  return response;
+  let content = undefined;
+
+  //if the cache file already exists
+  if (fs.existsSync(cacheFileName)) {
+    //variable for the file's content
+    const fileContent = fs.readFileSync(cacheFileName);
+    const fileData = JSON.parse(fileContent);
+
+    const oneHrAgo = Date.now() - 60 * 60 * 1000;
+
+    // if time since file was saved is greater than one hour
+    if (oneHrAgo < fileData.time) {
+      content = fileData.content;
+    }
+  }
+  //if the file doesnt exist (if content is still undefined)
+  if (!content) {
+    const response = await axios.get(process.env.BASE_URL);
+    const time = Date.now();
+
+    //have to convert otherwise [object] [object]
+    const data = JSON.stringify({
+      time: time,
+      content: response.data,
+    });
+    //sending the name of the file, and what is saved in the file
+    fs.writeFileSync(cacheFileName, data);
+
+    content = response.data;
+  }
+
+  return content;
 };
 
 //base setting that are used for every call
