@@ -2,9 +2,6 @@ const axios = require("axios").default;
 //part of node
 const fs = require("fs");
 
-// https://redcapes.se
-// http://hammarby.local
-
 //Site info for home page
 module.exports.getSiteInfo = async function () {
   //Creating cache file
@@ -139,9 +136,79 @@ module.exports.getPostById = async function (postId) {
 };
 
 module.exports.getPages = async function () {
-  return await api().get("/pages");
+  const cacheFileName = "cache/getPages";
+
+  let content = undefined;
+
+  if (fs.existsSync(cacheFileName)) {
+    const fileContent = fs.readFileSync(cacheFileName);
+    const fileData = JSON.parse(fileContent);
+
+    const oneHrAgo = Date.now() - 60 * 60 * 1000;
+
+    if (oneHrAgo < fileData.time) {
+      content = {
+        response: fileData.content,
+        headers: fileData.headers,
+      };
+    }
+  }
+  if (!content) {
+    const response = await api().get("/pages");
+    const time = Date.now();
+
+    const data = JSON.stringify({
+      time: time,
+      content: response.data,
+      headers: response.headers,
+    });
+
+    fs.writeFileSync(cacheFileName, data);
+
+    content = {
+      response: response.data,
+      headers: response.headers,
+    };
+  }
+
+  return content;
 };
 
 module.exports.getPagesById = async function (pageId) {
-  return await api().get("/pages/" + pageId);
+  const cacheFileName = "cache/getPagesById" + pageId;
+
+  let content = undefined;
+
+  if (fs.existsSync(cacheFileName)) {
+    const fileContent = fs.readFileSync(cacheFileName);
+    const fileData = JSON.parse(fileContent);
+
+    const oneHrAgo = Date.now() - 60 * 60 * 1000;
+
+    if (oneHrAgo < fileData.time) {
+      content = {
+        response: fileData.content,
+        headers: fileData.headers,
+      };
+    }
+  }
+  if (!content) {
+    const response = await api().get("/pages/" + pageId);
+    const time = Date.now();
+
+    const data = JSON.stringify({
+      time: time,
+      content: response.data,
+      headers: response.headers,
+    });
+
+    fs.writeFileSync(cacheFileName, data);
+
+    content = {
+      response: response.data,
+      headers: response.headers,
+    };
+  }
+
+  return content;
 };

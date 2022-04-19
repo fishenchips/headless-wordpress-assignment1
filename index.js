@@ -26,8 +26,7 @@ app.use(express.static("public"));
 
 /* --------- HOME PAGE ------ */
 app.get("/", async (req, res) => {
-  const pagesResponse = await api.getPages();
-  const pages = pagesResponse.data;
+  const pages = await api.getPages();
 
   const postsResponse = await api.getPosts();
   const posts = postsResponse.data;
@@ -55,8 +54,8 @@ app.get("/posts", async (req, res) => {
   //try catch so site doesnt crash
   try {
     //adding pages for header
-    const pagesResponse = await api.getPages();
-    const pages = pagesResponse.data;
+    const pages = await api.getPages();
+    //const pages = pagesResponse.data;
 
     const posts = await api.getPosts(page);
     //const posts = postsResponse.data;
@@ -91,8 +90,7 @@ app.get("/posts", async (req, res) => {
 
 /* ------- POST pages -------- */
 app.get("/posts/:id", async (req, res) => {
-  const pagesResponse = await api.getPages();
-  const pages = pagesResponse.data;
+  const pages = await api.getPages();
 
   const post = await api.getPostById(req.params.id);
 
@@ -110,22 +108,17 @@ app.get("/posts/:id", async (req, res) => {
 
 /* --------- PAGE pages --------- */
 app.get("/pages/:id", async (req, res) => {
-  const pagesRespone = await api.getPages();
-  const pages = pagesRespone.data;
+  const pages = await api.getPages();
 
-  const pageResponse = await api.getPagesById(req.params.id);
-  const page = pageResponse.data;
-  const pageContent = page.content.rendered;
-  const pageTitle = page.title.rendered;
+  const page = await api.getPagesById(req.params.id);
 
   const siteInfo = await api.getSiteInfo();
 
   res.render("page", {
     pages,
-    pageContent,
-    pageTitle,
+    page,
     style: "pages.css",
-    title: `${pageTitle}`,
+    title: page.response.title.rendered,
     siteInfo,
   });
 });
